@@ -18,6 +18,7 @@ namespace DrugCatalog.IntegrationTests
         {
             // Arrange
             var client = _factory.CreateClient();
+            await FixtureHelper.CreateDrug(client);
 
             // Act
             var response = await client.GetAsync("/drugs");
@@ -27,12 +28,75 @@ namespace DrugCatalog.IntegrationTests
             response.EnsureSuccessStatusCode(); // Status Code 200-299
         }
 
+        [Fact]
+        public async Task GetByLabel_ReturnsFiltered()
+        {
+            // Arrange
+            var client = _factory.CreateClient();
+            await FixtureHelper.CreateDrug(client);
+
+            // Act
+            var response = await client.GetAsync("/drugs?Label=Label 1");
+            var result = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            response.EnsureSuccessStatusCode(); // Status Code 200-299
+        }
+
+
+        [Fact]
+        public async Task GetByLabel_NotExistingReturnsEmpty()
+        {
+            // Arrange
+            var client = _factory.CreateClient();
+            await FixtureHelper.CreateDrug(client);
+
+            // Act
+            var response = await client.GetAsync("/drugs?Label=Label X");
+            var result = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            response.EnsureSuccessStatusCode(); // Status Code 200-299
+        }
+
+
+        [Fact]
+        public async Task GetByCode_ReturnsFiltered()
+        {
+            // Arrange
+            var client = _factory.CreateClient();
+            await FixtureHelper.CreateDrug(client);
+
+            // Act
+            var response = await client.GetAsync("/drugs?Code=CODE-1");
+            var result = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            response.EnsureSuccessStatusCode(); // Status Code 200-299
+        }
+
+
+        [Fact]
+        public async Task GetByCode_NotExistingReturnsEmpty()
+        {
+            // Arrange
+            var client = _factory.CreateClient();
+            await FixtureHelper.CreateDrug(client);
+
+            // Act
+            var response = await client.GetAsync("/drugs?Code=CODE-X");
+            var result = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            response.EnsureSuccessStatusCode(); // Status Code 200-299
+        }
 
         [Fact]
         public async Task GetSingle_ReturnsSingle()
         {
             // Arrange
             var client = _factory.CreateClient();
+            await FixtureHelper.CreateDrug(client);
 
             // Act
             var response = await client.GetAsync("/drugs/1");

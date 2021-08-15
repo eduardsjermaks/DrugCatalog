@@ -22,7 +22,7 @@ namespace DrugCatalog.Features.Drugs
         }
     }
 
-    public record GetListQuery: IRequest<IReadOnlyList<DrugDTO>>
+    public record GetListQuery : IRequest<IReadOnlyList<DrugDTO>>
     {
         public string? Code { get; init; }
 
@@ -53,10 +53,23 @@ namespace DrugCatalog.Features.Drugs
             _configuration = configuration;
         }
 
-        public async Task<IReadOnlyList<DrugDTO>> Handle(GetListQuery request, CancellationToken cancellationToken) =>
-            await _drugCatalogContext.Drugs
-            .OrderBy(d => d.Id)
-            .ProjectTo<DrugDTO>(_configuration)
-            .ToListAsync();
+        public async Task<IReadOnlyList<DrugDTO>> Handle(GetListQuery request, CancellationToken cancellationToken)
+        {
+            var drugsQuery = _drugCatalogContext.Drugs.AsQueryable();
+            if(request.Code != null)
+            {
+                drugsQuery = drugsQuery.Where(d => d.Code == request.Code);
+            }
+
+            if (request.Label != null)
+            {
+                drugsQuery = drugsQuery.Where(d => d.Label == request.Label);
+            }
+
+            return await drugsQuery
+                .OrderBy(d => d.Id)
+                .ProjectTo<DrugDTO>(_configuration)
+                .ToListAsync();
+        }
     }
 }

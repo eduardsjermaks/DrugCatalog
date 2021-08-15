@@ -36,5 +36,12 @@ namespace DrugCatalog.Controllers
                 Id = drugId,
                 Snapshot = snapshot
             });
+
+        [HttpDelete("{drugId}")]
+        public Task<DrugDTO> DeleteDrug(int drugId)
+            => _mediator.Send(new DeleteDrugCommand()
+            {
+                Id = drugId
+            });
     }
 }
