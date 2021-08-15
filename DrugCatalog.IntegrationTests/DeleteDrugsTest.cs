@@ -18,6 +18,7 @@ namespace DrugCatalog.IntegrationTests
         {
             // Arrange
             var client = _factory.CreateClient();
+            await FixtureHelper.CreateDrug(client);
 
             // Act
             var response = await client.DeleteAsync("/drugs/1");

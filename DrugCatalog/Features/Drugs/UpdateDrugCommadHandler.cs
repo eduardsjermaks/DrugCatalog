@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using DrugCatalog.Data;
 using DrugCatalog.Entities;
+using DrugCatalog.Exceptions;
+using FluentValidation;
 using MediatR;
 using System;
 using System.Threading;
@@ -26,24 +28,42 @@ namespace DrugCatalog.Features.Drugs
 
         public decimal Price { get; init; }
     }
+    public class UpdateDrugSnapshotValidator : AbstractValidator<UpdateDrugSnapshot>
+    {
+        public UpdateDrugSnapshotValidator()
+        {
+            RuleFor(m => m.Code).NotNull().Length(1, 30);
+            RuleFor(m => m.Label).NotNull().Length(1, 100);
+            RuleFor(m => m.Price).NotNull().GreaterThan(0);
+        }
+    }
 
 
     public class UpdateDrugCommadHandler : IRequestHandler<UpdateDrugCommand, DrugDTO>
     {
         private readonly DrugCatalogContext _drugCatalogContext;
         private readonly IMapper _mapper;
+        private readonly IValidator<UpdateDrugCommand> _validator;
 
-        public UpdateDrugCommadHandler(DrugCatalogContext drugCatalogContext, IMapper mapper)
+        public UpdateDrugCommadHandler(DrugCatalogContext drugCatalogContext, IMapper mapper,
+              IValidator<UpdateDrugCommand> validator)
         {
             _drugCatalogContext = drugCatalogContext;
             _mapper = mapper;
+            _validator = validator;
         }
 
         public async Task<DrugDTO> Handle(UpdateDrugCommand request, CancellationToken cancellationToken)
         {
+            var validationResult = _validator.Validate(request);
+            if (!validationResult.IsValid)
+            {
+                throw new BusinessException(validationResult.ToString());
+            }
+
             var drugToUpdate = await _drugCatalogContext.FindAsync<Drug>(request.Id);
             if (drugToUpdate == null)
-                throw new InvalidOperationException("Drug not found");
+                throw new BusinessException("Drug not found");
 
             _mapper.Map(request.Snapshot, drugToUpdate);
             await _drugCatalogContext.SaveChangesAsync(cancellationToken);

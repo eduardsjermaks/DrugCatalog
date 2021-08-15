@@ -21,6 +21,8 @@ namespace DrugCatalog.IntegrationTests
         {
             // Arrange
             var client = _factory.CreateClient();
+            await FixtureHelper.CreateDrug(client);
+
             var payload = Newtonsoft.Json.JsonConvert.SerializeObject(new CreateDrugCommand()
             {
                 Code = "CODE-2",
