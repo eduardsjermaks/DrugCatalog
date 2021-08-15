@@ -22,6 +22,12 @@ namespace DrugCatalog.Data
                     .Property(s => s.Label)
                     .HasMaxLength(100)
                     .IsRequired();
+
+
+            modelBuilder.Entity<Drug>()
+                    .Property(s => s.Price)
+                    .HasPrecision(18, 2)
+                    .IsRequired();
         }
     }
 }

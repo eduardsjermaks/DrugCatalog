@@ -33,8 +33,7 @@ namespace DrugCatalog
 
             services.AddDbContext<DrugCatalogContext>(options =>
             {
-                options.UseSqlite(
-                    @"Data Source=DrugCatalog.db;");
+                options.UseSqlServer(@"Server=.\SQLEXPRESS;Database=DrugCatalog;Trusted_Connection=True");
             });
         }
 

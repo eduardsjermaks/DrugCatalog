@@ -22,6 +22,8 @@ namespace DrugCatalog.IntegrationTests
             // Act
             var response = await client.GetAsync("/drugs");
 
+            var result = await response.Content.ReadAsStringAsync();
+
             // Assert
             response.EnsureSuccessStatusCode(); // Status Code 200-299
         }
