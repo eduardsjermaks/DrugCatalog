@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DrugCatalog.Features.Drugs;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DrugCatalog.Controllers
 {
@@ -7,14 +10,12 @@ namespace DrugCatalog.Controllers
     [Route("[controller]")]
     public class DrugsController : ControllerBase
     {
-        public DrugsController()
-        {
-        }
+        private readonly IMediator _mediator;
+
+        public DrugsController(IMediator mediator) => _mediator = mediator;
 
         [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new[] { "ok" };
-        }
+        public Task<IReadOnlyList<DrugDTO>> Get([FromQuery] GetListQuery query)
+            => _mediator.Send(query);
     }
 }
