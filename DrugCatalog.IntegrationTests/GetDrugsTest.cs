@@ -101,6 +101,7 @@ namespace DrugCatalog.IntegrationTests
             await FixtureHelper.CreateDrug(client);
 
             // Act
+            var response = await client.GetAsync("/drugs/1");
             var result = await response.Content.ReadAsStringAsync();
 
             // Assert
