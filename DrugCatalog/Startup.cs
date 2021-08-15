@@ -1,6 +1,8 @@
+using DrugCatalog.Data;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,6 +29,12 @@ namespace DrugCatalog
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DrugCatalog", Version = "v1" });
+            });
+
+            services.AddDbContext<DrugCatalogContext>(options =>
+            {
+                options.UseSqlite(
+                    @"Data Source=DrugCatalog.db;");
             });
         }
 
