@@ -21,7 +21,8 @@ namespace DrugCatalog.IntegrationTests
             await FixtureHelper.CreateDrug(client);
 
             // Act
-            var response = await client.DeleteAsync("/drugs/1");
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", FixtureHelper.AuthHeader);
+            var response = await client.DeleteAsync("/drugs/3");
             var result = await response.Content.ReadAsStringAsync();
 
             // Assert

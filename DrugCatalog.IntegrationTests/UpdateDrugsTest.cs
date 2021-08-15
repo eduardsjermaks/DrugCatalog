@@ -1,5 +1,6 @@
 using DrugCatalog.Features.Drugs;
 using Microsoft.AspNetCore.Mvc.Testing;
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace DrugCatalog.IntegrationTests
         }
 
         [Fact]
-        public async Task Post_CreatesValidDrug()
+        public async Task Put_UpdatesValidDrug()
         {
             // Arrange
             var client = _factory.CreateClient();
@@ -33,7 +34,8 @@ namespace DrugCatalog.IntegrationTests
             HttpContent content = new StringContent(payload, Encoding.UTF8, "application/json");
 
             // Act
-            var response = await client.PutAsync("/drugs/1", content);
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", FixtureHelper.AuthHeader);
+            var response = await client.PutAsync("/drugs/2", content);
             var result = await response.Content.ReadAsStringAsync();
 
             // Assert

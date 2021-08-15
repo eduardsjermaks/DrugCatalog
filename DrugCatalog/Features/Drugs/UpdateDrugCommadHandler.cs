@@ -63,7 +63,7 @@ namespace DrugCatalog.Features.Drugs
 
             var drugToUpdate = await _drugCatalogContext.FindAsync<Drug>(request.Id);
             if (drugToUpdate == null)
-                throw new BusinessException("Drug not found");
+                throw new NotFoundException("Drug not found");
 
             _mapper.Map(request.Snapshot, drugToUpdate);
             await _drugCatalogContext.SaveChangesAsync(cancellationToken);

@@ -23,6 +23,7 @@ namespace DrugCatalog.IntegrationTests
             await FixtureHelper.CreateDrug(client);
 
             // Act
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", FixtureHelper.AuthHeader);
             var response = await client.GetAsync("/drugs");
             var result = await response.Content.ReadAsStringAsync();
 
@@ -38,6 +39,7 @@ namespace DrugCatalog.IntegrationTests
             await FixtureHelper.CreateDrug(client);
 
             // Act
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", FixtureHelper.AuthHeader);
             var response = await client.GetAsync("/drugs?Label=Label 1");
             var result = await response.Content.ReadAsStringAsync();
 
@@ -54,6 +56,7 @@ namespace DrugCatalog.IntegrationTests
             await FixtureHelper.CreateDrug(client);
 
             // Act
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", FixtureHelper.AuthHeader);
             var response = await client.GetAsync("/drugs?Label=Label X");
             var result = await response.Content.ReadAsStringAsync();
 
@@ -70,6 +73,7 @@ namespace DrugCatalog.IntegrationTests
             await FixtureHelper.CreateDrug(client);
 
             // Act
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", FixtureHelper.AuthHeader);
             var response = await client.GetAsync("/drugs?Code=CODE-1");
             var result = await response.Content.ReadAsStringAsync();
 
@@ -86,6 +90,7 @@ namespace DrugCatalog.IntegrationTests
             await FixtureHelper.CreateDrug(client);
 
             // Act
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", FixtureHelper.AuthHeader);
             var response = await client.GetAsync("/drugs?Code=CODE-X");
             var result = await response.Content.ReadAsStringAsync();
 
@@ -101,7 +106,8 @@ namespace DrugCatalog.IntegrationTests
             await FixtureHelper.CreateDrug(client);
 
             // Act
-            var response = await client.GetAsync("/drugs/1");
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", FixtureHelper.AuthHeader);
+            var response = await client.GetAsync("/drugs/2");
             var result = await response.Content.ReadAsStringAsync();
 
             // Assert

@@ -31,6 +31,7 @@ namespace DrugCatalog.IntegrationTests
             HttpContent content = new StringContent(payload, Encoding.UTF8, "application/json");
 
             // Act
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", FixtureHelper.AuthHeader);
             var response = await client.PostAsync("/drugs", content);
             var result = await response.Content.ReadAsStringAsync();
 
@@ -53,6 +54,7 @@ namespace DrugCatalog.IntegrationTests
             HttpContent content = new StringContent(payload, Encoding.UTF8, "application/json");
 
             // Act
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", FixtureHelper.AuthHeader);
             var response = await client.PostAsync("/drugs", content);
             var result = await response.Content.ReadAsStringAsync();
 
