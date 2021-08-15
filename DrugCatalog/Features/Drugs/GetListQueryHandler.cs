@@ -18,6 +18,7 @@ namespace DrugCatalog.Features.Drugs
         {
             CreateMap<Drug, DrugDTO>();
             CreateMap<CreateDrugCommand, Drug>();
+            CreateMap<UpdateDrugSnapshot, Drug>();
         }
     }
 

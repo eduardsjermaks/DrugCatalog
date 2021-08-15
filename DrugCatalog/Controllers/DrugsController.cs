@@ -15,11 +15,26 @@ namespace DrugCatalog.Controllers
         public DrugsController(IMediator mediator) => _mediator = mediator;
 
         [HttpGet]
-        public Task<IReadOnlyList<DrugDTO>> GetDrug([FromQuery] GetListQuery query)
+        public Task<IReadOnlyList<DrugDTO>> GetDrugs([FromQuery] GetListQuery query)
             => _mediator.Send(query);
+
+        [HttpGet("{drugId}")]
+        public Task<DrugDTO> GetSingleDrug(int drugId)
+            => _mediator.Send(new GetSingleQuery() 
+            {
+                Id = drugId
+            });
 
         [HttpPost]
         public Task<DrugDTO> CreateDrug(CreateDrugCommand command)
             => _mediator.Send(command);
+
+        [HttpPut("{drugId}")]
+        public Task<DrugDTO> UpdateDrug(int drugId, UpdateDrugSnapshot snapshot)
+            => _mediator.Send(new UpdateDrugCommand()
+            {
+                Id = drugId,
+                Snapshot = snapshot
+            });
     }
 }
