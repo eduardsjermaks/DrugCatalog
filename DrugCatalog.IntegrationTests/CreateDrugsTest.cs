@@ -37,5 +37,27 @@ namespace DrugCatalog.IntegrationTests
             // Assert
             response.EnsureSuccessStatusCode(); // Status Code 200-299
         }
+
+        [Fact]
+        public async Task Post_CreatesInvalidDrug()
+        {
+            // Arrange
+            var client = _factory.CreateClient();
+            var payload = Newtonsoft.Json.JsonConvert.SerializeObject(new CreateDrugCommand()
+            {
+                Code = "CODE-1",
+                Label = "Label 1",
+                Description = "Sample description",
+                Price = -1
+            });
+            HttpContent content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await client.PostAsync("/drugs", content);
+            var result = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+        }
     }
 }

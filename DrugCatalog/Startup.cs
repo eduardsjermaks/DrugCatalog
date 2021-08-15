@@ -1,4 +1,6 @@
 using DrugCatalog.Data;
+using DrugCatalog.Features.Drugs;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,8 +26,12 @@ namespace DrugCatalog
         {
             services.AddAutoMapper(typeof(Startup));
             services.AddMediatR(typeof(Startup));
+            services.AddScoped<IValidator<GetSingleQuery>, GetSingleQueryValidator>();
+            services.AddScoped<IValidator<CreateDrugCommand>, CreateDrugCommandValidator>();
+            services.AddScoped<IValidator<DeleteDrugCommand>, DeleteDrugCommandValidator>();
+            services.AddScoped<IValidator<UpdateDrugSnapshot>, UpdateDrugSnapshotValidator>();
 
-            services.AddControllers();
+            services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DrugCatalog", Version = "v1" });

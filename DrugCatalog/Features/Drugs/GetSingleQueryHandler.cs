@@ -46,9 +46,14 @@ namespace DrugCatalog.Features.Drugs
                 throw new BusinessException(validationResult.ToString());
             }
 
-            return await _drugCatalogContext.Drugs
+            var drugToReturn = await _drugCatalogContext.Drugs
                 .ProjectTo<DrugDTO>(_configuration)
-                .SingleAsync(d => d.Id == request.Id, cancellationToken);
+                .SingleOrDefaultAsync(d => d.Id == request.Id, cancellationToken);
+
+            if (drugToReturn == null)
+                throw new NotFoundException();
+
+            return drugToReturn;
         }
     }
 }

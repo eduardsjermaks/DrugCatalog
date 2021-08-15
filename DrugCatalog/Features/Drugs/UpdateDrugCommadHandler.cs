@@ -43,10 +43,10 @@ namespace DrugCatalog.Features.Drugs
     {
         private readonly DrugCatalogContext _drugCatalogContext;
         private readonly IMapper _mapper;
-        private readonly IValidator<UpdateDrugCommand> _validator;
+        private readonly IValidator<UpdateDrugSnapshot> _validator;
 
         public UpdateDrugCommadHandler(DrugCatalogContext drugCatalogContext, IMapper mapper,
-              IValidator<UpdateDrugCommand> validator)
+              IValidator<UpdateDrugSnapshot> validator)
         {
             _drugCatalogContext = drugCatalogContext;
             _mapper = mapper;
@@ -55,7 +55,7 @@ namespace DrugCatalog.Features.Drugs
 
         public async Task<DrugDTO> Handle(UpdateDrugCommand request, CancellationToken cancellationToken)
         {
-            var validationResult = _validator.Validate(request);
+            var validationResult = _validator.Validate(request.Snapshot);
             if (!validationResult.IsValid)
             {
                 throw new BusinessException(validationResult.ToString());
