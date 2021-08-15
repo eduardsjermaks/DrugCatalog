@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc.Testing;
+using System;
+using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -99,22 +101,6 @@ namespace DrugCatalog.IntegrationTests
             await FixtureHelper.CreateDrug(client);
 
             // Act
-            var response = await client.GetAsync("/drugs/1");
-            var result = await response.Content.ReadAsStringAsync();
-
-            // Assert
-            response.EnsureSuccessStatusCode(); // Status Code 200-299
-        }
-
-        [Fact]
-        public async Task GetSingle_NotExistingReturnsNotFound()
-        {
-            // Arrange
-            var client = _factory.CreateClient();
-            await FixtureHelper.CreateDrug(client);
-
-            // Act
-            var response = await client.GetAsync("/drugs/9999");
             var result = await response.Content.ReadAsStringAsync();
 
             // Assert

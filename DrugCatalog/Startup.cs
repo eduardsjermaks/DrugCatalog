@@ -55,6 +55,8 @@ namespace DrugCatalog
 
             app.UseHttpsRedirection();
 
+            app.UseMiddleware<BasicAuthMiddleware>();
+
             app.UseRouting();
 
             app.UseAuthorization();
